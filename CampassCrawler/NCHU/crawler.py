@@ -102,7 +102,7 @@ class Crawler(object):
 					print(e)    
 					raise e    
 
-		for key, value in self.errCourse.items():
+		for key, value in list(self.errCourse.items()):
 			# with open(key+".json.error", 'w', encoding='utf-8') as f:
 			# 	json.dump(value, f)
 			with open("json/"+key+".json", 'r', encoding='utf-8') as f:

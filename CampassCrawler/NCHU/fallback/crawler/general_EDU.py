@@ -1,6 +1,6 @@
 # coding=utf-8
 
-import json,re,sys,pyprind,requests,urllib,traceback
+import json,re,sys,pyprind,requests,urllib.request,urllib.parse,urllib.error,traceback
 from pyquery import PyQuery as pq
 
 head_start_value = ["必選別"]
@@ -60,7 +60,7 @@ def get_nchu_course(url, payload):
             if len(thead) == 0:
                 thead = row#這樣就可以把第一行存進thead裡面，以後就不會再去修改到他了
             else:
-                row = dict(zip(thead, row))#用thead當dict的key               
+                row = dict(list(zip(thead, row)))#用thead當dict的key               
                 datas.append(row)
     return datas
 
@@ -91,7 +91,7 @@ def parse_location(location_str):
 
 def parse(data):#會傳入一門課程的dict
     r_data = {}    
-    for k in data.keys():#用list回傳dict裡面所有的key
+    for k in list(data.keys()):#用list回傳dict裡面所有的key
         if k in col_namekey:
             col_key = col_namekey[k]#將中文的key轉成英文的
             if col_key not in r_data or len(data[k]) > len(r_data[col_key]):
@@ -157,7 +157,7 @@ def end_json(json_path):
 if __name__ == "__main__":
     if len(sys.argv) < 3:
         #sys.argv[0]是模組名稱喔!
-        print("Usage:\n\tpython[3] "+sys.argv[0]+" <url> <json_output> dept_id1 [dept_id2 [dept_id3 ...]]")
+        print(("Usage:\n\tpython[3] "+sys.argv[0]+" <url> <json_output> dept_id1 [dept_id2 [dept_id3 ...]]"))
         print("\n\n\t URL can be:https://onepiece.nchu.edu.tw/cofsys/plsql/crseqry_home");
         print("\t URL can be:https://onepiece.nchu.edu.tw/cofsys/plsql/crseqry_gene");
         sys.exit(1)#0為正常結束，其他數字exit會拋出一個例外，可以被捕獲
@@ -202,7 +202,7 @@ if __name__ == "__main__":
     except Exception as e:
         print("================ ERR ================")
         print(e)
-        print(traceback.format_exc())
+        print((traceback.format_exc()))
 
     print("================ WARN ================")
     with open("err.txt", 'w' ,encoding='UTF-8') as error_file:

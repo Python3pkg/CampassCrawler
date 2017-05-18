@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import json
+from . import json
 try:
 	with open('json/U.json', 'r', encoding='UTF-8') as f:
 	    json.load(f)

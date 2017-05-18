@@ -50,7 +50,7 @@ class import2Mongo(object):
 			dept = self.getDeptCode(i['for_dept'], i['class'])
 			# dept == False means getDeptCode has error
 			if dept == False: 
-				print(i['for_dept'], i['class'])
+				print((i['for_dept'], i['class']))
 				continue
 			code = i['code']
 			grade = i['class']
@@ -67,7 +67,7 @@ class import2Mongo(object):
 
 			result[dept][oblAttr].setdefault(grade, []).append(code)
 
-		resultList = tuple( dict(dept=dept, course=course, school='NCHU') for dept, course in result.items())
+		resultList = tuple( dict(dept=dept, course=course, school='NCHU') for dept, course in list(result.items()))
 		self.DeptCollect.insert(resultList)
 		self.CourseOfTime.create_index([("school", pymongo.ASCENDING),("dept", pymongo.ASCENDING)])
 
@@ -88,7 +88,7 @@ class import2Mongo(object):
 					for degree in self.degreeTable.setdefault(course['for_dept'], []):
 						result[day][t].setdefault(degree, {}).setdefault(self.getDeptCode(course['for_dept'], course['class']), []).append(course['code'])
 
-		resultList = tuple(dict(school='NCHU', day=d, time=t, value=codeArr) for d in result for t, codeArr in result[d].items())
+		resultList = tuple(dict(school='NCHU', day=d, time=t, value=codeArr) for d in result for t, codeArr in list(result[d].items()))
 		self.CourseOfTime.insert(resultList)
 		self.CourseOfTime.create_index([("school", pymongo.ASCENDING),("day", pymongo.ASCENDING), ('time',pymongo.ASCENDING)])
 
